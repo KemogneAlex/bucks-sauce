@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation } from "wouter";
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
-import { Menu, X, ShoppingCart } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
+import { Menu, X, ShoppingBag } from "lucide-react";
 import { gsap } from "gsap";
 
 // ── Letter-by-letter stagger hover link ──────────────────────────────────────
@@ -138,6 +138,7 @@ const SVG_HEAD = `<g id="head"><path id="Vector_6" d="M67.4051 78.5182L65.5964 7
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [location] = useLocation();
   const { scrollY } = useScroll();
 
@@ -162,6 +163,11 @@ export default function Navbar() {
     scrollY, [0, 80],
     ["rgba(16,11,6,0)", "rgba(16,11,6,0.97)"]
   );
+
+  // Seuil : après 80px → sticky bar prend la place des liens
+  useMotionValueEvent(scrollY, "change", (v) => {
+    setScrolled(v > 80);
+  });
 
   useEffect(() => { setMenuOpen(false); }, [location]);
 
@@ -227,34 +233,87 @@ export default function Navbar() {
             </motion.div>
           </Link>
 
-          {/* ── Liens desktop ── */}
-          <div
-            className="hidden md:flex items-center"
-            style={{ gap: "36px", paddingTop: "14px" }}
-          >
-            {NAV_LINKS.map((item) => (
-              <StaggerNavLink key={item.href} label={item.label} href={item.href} />
-            ))}
-            <StaggerNavLink label="Cart(0)" href="/cart" />
-          </div>
+          {/* ── Droite : deux couches qui se relaient au scroll ── */}
+          <div style={{ position: "relative", display: "flex", alignItems: "center", paddingTop: "14px", minHeight: "44px" }}>
 
-          {/* ── Hamburger mobile ── */}
-          <button
-            className="md:hidden"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Menu"
-            style={{
-              color: "var(--cream)",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              paddingTop: "10px",
-            }}
-          >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            {/* COUCHE 1 — Liens desktop (visible au top, disparaît au scroll) */}
+            <motion.div
+              className="hidden md:flex items-center"
+              animate={scrolled ? { opacity: 0, y: -14, pointerEvents: "none" } : { opacity: 1, y: 0, pointerEvents: "auto" }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+              style={{ gap: "36px", position: "absolute", right: 0, whiteSpace: "nowrap" }}
+            >
+              {NAV_LINKS.map((item) => (
+                <StaggerNavLink key={item.href} label={item.label} href={item.href} />
+              ))}
+              <StaggerNavLink label="Cart(0)" href="/cart" />
+            </motion.div>
+
+            {/* COUCHE 2 — Sticky bar : GET SAUCE + panier + hamburger (invisible au top, visible au scroll) */}
+            <motion.div
+              className="hidden md:flex items-center"
+              animate={scrolled ? { opacity: 1, y: 0, pointerEvents: "auto" } : { opacity: 0, y: 14, pointerEvents: "none" }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+              style={{ gap: "10px", position: "absolute", right: 0 }}
+            >
+              {/* Bouton GET SAUCE */}
+              <Link to="/shop">
+                <a style={{
+                  display: "inline-flex", alignItems: "center", justifyContent: "center",
+                  background: "var(--cream)", color: "var(--black)",
+                  fontFamily: "'Bebas Neue', sans-serif", fontSize: "15px",
+                  letterSpacing: "0.08em", padding: "10px 22px",
+                  borderRadius: "10px", border: "none", cursor: "pointer",
+                  textDecoration: "none", whiteSpace: "nowrap",
+                }}>
+                  GET SAUCE
+                </a>
+              </Link>
+
+              {/* Icône panier */}
+              <Link to="/cart">
+                <a style={{
+                  display: "inline-flex", alignItems: "center", justifyContent: "center",
+                  width: "42px", height: "42px", borderRadius: "10px",
+                  border: "1.5px solid var(--cream)", color: "var(--cream)",
+                  cursor: "pointer", textDecoration: "none",
+                }}>
+                  <ShoppingBag size={18} />
+                </a>
+              </Link>
+
+              {/* Hamburger */}
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Menu"
+                style={{
+                  display: "inline-flex", alignItems: "center", justifyContent: "center",
+                  width: "42px", height: "42px", borderRadius: "10px",
+                  border: "1.5px solid var(--cream)", color: "var(--cream)",
+                  background: "none", cursor: "pointer",
+                }}
+              >
+                {menuOpen ? <X size={18} /> : <span style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                  <span style={{ display: "block", width: "18px", height: "2px", background: "var(--cream)", borderRadius: "1px" }} />
+                  <span style={{ display: "block", width: "18px", height: "2px", background: "var(--cream)", borderRadius: "1px" }} />
+                </span>}
+              </button>
+            </motion.div>
+
+            {/* Hamburger mobile (toujours visible sur mobile) */}
+            <button
+              className="md:hidden"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Menu"
+              style={{
+                color: "var(--cream)", background: "none",
+                border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center",
+              }}
+            >
+              {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </motion.header>
 
