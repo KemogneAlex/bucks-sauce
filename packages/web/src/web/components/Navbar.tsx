@@ -266,7 +266,7 @@ export default function Navbar() {
                   borderRadius: "10px", border: "none", cursor: "pointer",
                   textDecoration: "none", whiteSpace: "nowrap",
                 }}>
-                  GET SAUCE
+                  COMMANDER
                 </a>
               </Link>
 
@@ -282,22 +282,6 @@ export default function Navbar() {
                 </a>
               </Link>
 
-              {/* Hamburger */}
-              <button
-                onClick={() => setMenuOpen(!menuOpen)}
-                aria-label="Menu"
-                style={{
-                  display: "inline-flex", alignItems: "center", justifyContent: "center",
-                  width: "42px", height: "42px", borderRadius: "10px",
-                  border: "1.5px solid var(--cream)", color: "var(--cream)",
-                  background: "none", cursor: "pointer",
-                }}
-              >
-                {menuOpen ? <X size={18} /> : <span style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-                  <span style={{ display: "block", width: "18px", height: "2px", background: "var(--cream)", borderRadius: "1px" }} />
-                  <span style={{ display: "block", width: "18px", height: "2px", background: "var(--cream)", borderRadius: "1px" }} />
-                </span>}
-              </button>
             </motion.div>
 
             {/* Hamburger mobile (toujours visible sur mobile) */}
