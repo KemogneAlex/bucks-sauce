@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "wouter";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { useLenis } from "../hooks/useLenis";
 import Marquee from "../components/Marquee";
@@ -12,44 +12,35 @@ export default function HomePage() {
   useLenis();
 
   const heroRef = useRef<HTMLDivElement>(null);
-  const bottleRef = useRef<HTMLDivElement>(null);
-  const [activeProduct, setActiveProduct] = useState(0);
+
 
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
-  // GSAP hero text stagger
+  // GSAP hero text stagger — ligne par ligne
   useEffect(() => {
     const tl = gsap.timeline({ delay: 0.3 });
     tl.fromTo(
-      ".hero-char",
-      { yPercent: 110, opacity: 0 },
-      { yPercent: 0, opacity: 1, stagger: 0.05, duration: 0.8, ease: "power3.out" }
+      ".hero-sub",
+      { opacity: 0, y: 16 },
+      { opacity: 0.7, y: 0, duration: 0.6, ease: "power2.out" }
     );
     tl.fromTo(
-      ".hero-sub",
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-      "-=0.3"
+      ".hero-char",
+      { yPercent: 105, opacity: 0 },
+      { yPercent: 0, opacity: 1, stagger: 0.12, duration: 0.9, ease: "power3.out" },
+      "-=0.2"
     );
     tl.fromTo(
       ".hero-cta",
       { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
-      "-=0.2"
+      "-=0.3"
     );
   }, []);
 
-  // Rotate active product
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveProduct((p) => (p + 1) % products.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
 
-  const currentProduct = products[activeProduct];
 
   return (
     <div style={{ background: "var(--black)", color: "var(--cream)", overflowX: "hidden" }}>
@@ -81,165 +72,79 @@ export default function HomePage() {
           <div className="animate-float2 absolute top-[40%] left-[5%] text-3xl opacity-15">🔥</div>
         </div>
 
-        {/* Main hero content */}
+        {/* Main hero content — centré comme le vrai site */}
         <motion.div
-          style={{ y: heroY, opacity: heroOpacity }}
-          className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-24"
+          className="relative z-10 w-full flex flex-col items-center justify-center text-center px-4"
+          style={{ y: heroY, opacity: heroOpacity, paddingTop: "140px", paddingBottom: "80px" }}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[85vh]">
-            {/* Left — text */}
-            <div>
-              {/* Eyebrow */}
-              <div className="hero-sub opacity-0 mb-6">
-                <span
-                  className="text-[var(--red)] uppercase text-xs tracking-[0.3em]"
-                  style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 500 }}
-                >
-                  Petit Lot · Vrais Ingrédients
-                </span>
-              </div>
+          {/* Eyebrow */}
+          <div className="hero-sub opacity-0 mb-8">
+            <span
+              className="uppercase tracking-[0.3em] text-[var(--cream)]"
+              style={{
+                fontFamily: "'Oswald', sans-serif",
+                fontWeight: 400,
+                fontSize: "clamp(10px, 1.2vw, 14px)",
+                opacity: 0.7,
+              }}
+            >
+              Petit Lot · Vrais Ingrédients
+            </span>
+          </div>
 
-              {/* Hero title */}
-              <div className="overflow-hidden mb-2">
-                <h1
-                  className="text-[14vw] md:text-[10vw] lg:text-[8vw] uppercase leading-none tracking-tight"
-                  style={{ fontFamily: "'Bebas Neue', sans-serif", color: "var(--cream)" }}
-                >
-                  {"LA MEILLEURE".split("").map((char, i) => (
-                    <span
-                      key={i}
-                      className="hero-char inline-block"
-                      style={{ opacity: 0, display: char === " " ? "inline" : "inline-block" }}
-                    >
-                      {char === " " ? "\u00A0" : char}
-                    </span>
-                  ))}
-                </h1>
-              </div>
-              <div className="overflow-hidden mb-2">
-                <h1
-                  className="text-[14vw] md:text-[10vw] lg:text-[8vw] uppercase leading-none tracking-tight"
-                  style={{ fontFamily: "'Bebas Neue', sans-serif", color: "var(--red)" }}
-                >
-                  {"SAUCE".split("").map((char, i) => (
-                    <span
-                      key={i}
-                      className="hero-char inline-block"
-                      style={{ opacity: 0 }}
-                    >
-                      {char}
-                    </span>
-                  ))}
-                </h1>
-              </div>
-              <div className="overflow-hidden mb-8">
-                <h1
-                  className="text-[14vw] md:text-[10vw] lg:text-[8vw] uppercase leading-none tracking-tight"
-                  style={{ fontFamily: "'Bebas Neue', sans-serif", color: "var(--cream)" }}
-                >
-                  {"QUI EXISTE".split("").map((char, i) => (
-                    <span
-                      key={i}
-                      className="hero-char inline-block"
-                      style={{ opacity: 0, display: char === " " ? "inline" : "inline-block" }}
-                    >
-                      {char === " " ? "\u00A0" : char}
-                    </span>
-                  ))}
-                </h1>
-              </div>
-
-              {/* Sub */}
-              <p
-                className="hero-sub opacity-0 text-[var(--cream)] opacity-70 max-w-md mb-8 leading-relaxed"
-                style={{ fontFamily: "'Inter', sans-serif", fontWeight: 300, fontSize: "1.05rem" }}
+          {/* Titre hero — 3 lignes, style vrai site */}
+          <h1
+            className="uppercase leading-none w-full"
+            style={{
+              fontFamily: "'Pouler', sans-serif",
+              fontSize: "clamp(60px, 12vw, 170px)",
+              lineHeight: 0.9,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {/* Ligne 1 : outline (stroke) */}
+            <div className="overflow-hidden">
+              <div
+                className="hero-char block"
+                style={{
+                  opacity: 0,
+                  color: "transparent",
+                  WebkitTextStroke: "3px var(--cream)",
+                }}
               >
-                Faite en petits lots avec de vrais fruits, des piments frais
-                et de l'ail rôti. Aucun sirop de maïs. Aucune huile végétale.
-                Aucun compromis.
-              </p>
-
-              {/* CTAs */}
-              <div className="hero-cta opacity-0 flex flex-col sm:flex-row gap-4">
-                <Link to="/shop">
-                  <button className="btn-sauce">Commander maintenant →</button>
-                </Link>
-                <Link to="/shop">
-                  <button className="btn-outline">Voir nos saveurs</button>
-                </Link>
+                LA MEILLEURE
               </div>
             </div>
 
-            {/* Right — rotating product display */}
-            <div className="relative flex items-center justify-center" ref={bottleRef}>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentProduct.slug}
-                  initial={{ opacity: 0, scale: 0.85, y: 40 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.85, y: -40 }}
-                  transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="relative"
-                >
-                  {/* Product circle */}
-                  <div
-                    className="relative w-[260px] h-[260px] md:w-[340px] md:h-[340px] rounded-full flex flex-col items-center justify-center mx-auto"
-                    style={{
-                      background: `radial-gradient(circle at 40% 40%, ${currentProduct.accentColor}40, ${currentProduct.bgColor}99)`,
-                      border: `2px solid ${currentProduct.accentColor}30`,
-                      boxShadow: `0 0 80px ${currentProduct.accentColor}25`,
-                    }}
-                  >
-                    {/* Emoji large */}
-                    <div className="text-[100px] md:text-[130px] animate-float leading-none select-none">
-                      {currentProduct.emoji}
-                    </div>
-                  </div>
-
-                  {/* Product info overlay */}
-                  <div className="absolute -bottom-8 left-0 right-0 text-center">
-                    <div
-                      className="text-3xl md:text-4xl uppercase tracking-wider text-[var(--cream)] mb-1"
-                      style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                    >
-                      {currentProduct.name}
-                    </div>
-                    <div className="flex items-center justify-center gap-2">
-                      {currentProduct.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-[8px] tracking-widest uppercase px-2 py-0.5"
-                          style={{
-                            fontFamily: "'Oswald', sans-serif",
-                            color: currentProduct.accentColor,
-                            border: `1px solid ${currentProduct.accentColor}50`,
-                          }}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Dots navigation */}
-              <div className="absolute -bottom-20 left-0 right-0 flex items-center justify-center gap-3">
-                {products.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveProduct(i)}
-                    className="transition-all duration-300"
-                    style={{
-                      width: i === activeProduct ? "28px" : "8px",
-                      height: "8px",
-                      borderRadius: i === activeProduct ? "4px" : "50%",
-                      background: i === activeProduct ? "var(--red)" : "rgba(245,230,200,0.3)",
-                    }}
-                  />
-                ))}
+            {/* Ligne 2 : filled cream */}
+            <div className="overflow-hidden">
+              <div
+                className="hero-char block"
+                style={{ opacity: 0, color: "var(--cream)" }}
+              >
+                SAUCE
               </div>
             </div>
+
+            {/* Ligne 3 : filled cream */}
+            <div className="overflow-hidden">
+              <div
+                className="hero-char block"
+                style={{ opacity: 0, color: "var(--cream)" }}
+              >
+                QUI EXISTE
+              </div>
+            </div>
+          </h1>
+
+          {/* CTA */}
+          <div className="hero-cta opacity-0 mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/shop">
+              <button className="btn-sauce">Commander maintenant →</button>
+            </Link>
+            <Link to="/shop">
+              <button className="btn-outline">Voir nos saveurs</button>
+            </Link>
           </div>
         </motion.div>
 
