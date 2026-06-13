@@ -5,67 +5,55 @@ import { Menu, X, ShoppingCart } from "lucide-react";
 import { gsap } from "gsap";
 
 // ── Letter-by-letter stagger hover link ──────────────────────────────────────
-// État repos  : stroke cream (comme "LA MEILLEURE")
-// État hover  : lettre monte → filled cream (comme "SAUCE")
-// Technique   : 2 layers par lettre superposés (stroke + filled),
-//               on translate le filled de +100% → 0% en stagger
+// Repos  : stroke outline cream (comme "LA MEILLEURE")
+// Hover  : chaque lettre défile vers le haut et revient filled cream (comme "SAUCE")
+//          même mot, même position — juste la couleur qui change avec le scroll
 function StaggerNavLink({ label, href }: { label: string; href: string }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
   const handleEnter = useCallback(() => {
     if (!ref.current) return;
-    const filled = ref.current.querySelectorAll<HTMLElement>(".nchar-filled");
-    const stroke = ref.current.querySelectorAll<HTMLElement>(".nchar-stroke");
+    const chars = ref.current.querySelectorAll<HTMLElement>(".nchar-wrap");
     if (tlRef.current) tlRef.current.kill();
     tlRef.current = gsap.timeline();
-    // filled remonte de bas en haut, stagger lettre par lettre
-    tlRef.current
-      .to(filled, {
-        y: "0%",
-        stagger: 0.045,
-        duration: 0.28,
-        ease: "power3.out",
-      }, 0)
-      // stroke descend en même temps
-      .to(stroke, {
-        y: "-100%",
-        stagger: 0.045,
-        duration: 0.28,
-        ease: "power3.out",
-      }, 0);
+    // chaque lettre : monte rapidement (exit stroke), redescend en filled
+    chars.forEach((wrap, i) => {
+      const stroke = wrap.querySelector<HTMLElement>(".nl-stroke");
+      const filled = wrap.querySelector<HTMLElement>(".nl-filled");
+      if (!stroke || !filled) return;
+      tlRef.current!
+        .to(stroke, { y: "-100%", duration: 0.18, ease: "power2.in" }, i * 0.04)
+        .fromTo(filled, { y: "100%" }, { y: "0%", duration: 0.2, ease: "power2.out" }, i * 0.04 + 0.1);
+    });
   }, []);
 
   const handleLeave = useCallback(() => {
     if (!ref.current) return;
-    const filled = ref.current.querySelectorAll<HTMLElement>(".nchar-filled");
-    const stroke = ref.current.querySelectorAll<HTMLElement>(".nchar-stroke");
+    const chars = ref.current.querySelectorAll<HTMLElement>(".nchar-wrap");
     if (tlRef.current) tlRef.current.kill();
     tlRef.current = gsap.timeline();
-    // filled redescend
-    tlRef.current
-      .to(filled, {
-        y: "100%",
-        stagger: 0.035,
-        duration: 0.22,
-        ease: "power2.in",
-      }, 0)
-      // stroke revient
-      .to(stroke, {
-        y: "0%",
-        stagger: 0.035,
-        duration: 0.22,
-        ease: "power2.in",
-      }, 0);
+    chars.forEach((wrap, i) => {
+      const stroke = wrap.querySelector<HTMLElement>(".nl-stroke");
+      const filled = wrap.querySelector<HTMLElement>(".nl-filled");
+      if (!stroke || !filled) return;
+      tlRef.current!
+        .to(filled, { y: "100%", duration: 0.16, ease: "power2.in" }, i * 0.035)
+        .fromTo(stroke, { y: "-100%" }, { y: "0%", duration: 0.18, ease: "power2.out" }, i * 0.035 + 0.08);
+    });
   }, []);
 
   const FONT_STYLE: React.CSSProperties = {
     fontFamily: "'Pouler', sans-serif",
     fontSize: "28.29px",
-    lineHeight: "24.05px",
+    lineHeight: "1em",
     letterSpacing: "-0.566px",
-    display: "inline-block",
+    display: "block",
     whiteSpace: "pre",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
   };
 
   return (
@@ -73,51 +61,44 @@ function StaggerNavLink({ label, href }: { label: string; href: string }) {
       <a
         ref={ref}
         className="uppercase cursor-pointer"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "0",
-          textDecoration: "none",
-          position: "relative",
-        }}
+        style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
       >
         {label.split("").map((ch, i) => {
           const char = ch === " " ? "\u00A0" : ch;
           return (
-            // conteneur par lettre : overflow hidden = masque le sliding
             <span
               key={i}
+              className="nchar-wrap"
               style={{
                 display: "inline-block",
                 overflow: "hidden",
                 height: "1.1em",
-                lineHeight: "1.1em",
-                verticalAlign: "bottom",
+                position: "relative",
+                // largeur auto basée sur le char (on laisse le stroke définir la taille)
               }}
             >
-              {/* stroke layer (repos) */}
+              {/* stroke — état repos */}
               <span
-                className="nchar-stroke"
+                className="nl-stroke"
                 style={{
                   ...FONT_STYLE,
                   color: "transparent",
                   WebkitTextStroke: "1px #f5e4c7",
-                  display: "block",
+                  position: "relative",
                   willChange: "transform",
                 }}
               >
                 {char}
               </span>
-              {/* filled layer (hover) — part de bas */}
+              {/* filled — état hover, part du bas */}
               <span
-                className="nchar-filled"
+                className="nl-filled"
                 style={{
                   ...FONT_STYLE,
                   color: "#f5e4c7",
-                  WebkitTextStroke: "0px transparent",
-                  display: "block",
+                  WebkitTextStroke: "0",
                   transform: "translateY(100%)",
                   willChange: "transform",
                 }}
