@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;500;600;700&family=Inter+Tight:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ===== CSS Variables ===== */
+:root {
+  /* Core palette — valeurs exactes du vrai site */
+  --background: #100b06;
+  --foreground: #f5e4c7;
+  --menu: #322c23;
+  --background-lighter: #272119;
+  --gold: #be8d3f;
+  --orange: #f15726;
+  --red: #da1f27;
+  --brown: #593e2c;
+
+  /* Aliases locaux */
+  --black: #100b06;
+  --cream: #f5e4c7;
+  --cherry: #7a1020;
+  --white: #ffffff;
+
+  /* Typographie — échelle du vrai site */
+  --text-100: 52px; --text-100--line-height: .88; --text-100--letter-spacing: -.02em;
+  --text-80: 60px;  --text-80--line-height: 1;   --text-80--letter-spacing: -.02em;
+  --text-60: 32px;  --text-60--line-height: 1;   --text-60--letter-spacing: -.02em;
+  --text-50: 40px;  --text-50--line-height: .88; --text-50--letter-spacing: -.02em;
+  --text-44: 29px;  --text-44--line-height: 1.1; --text-44--letter-spacing: -.02em;
+  --text-40: 28px;  --text-40--line-height: 1.1; --text-40--letter-spacing: -.02em;
+  --text-36: 30px;  --text-36--line-height: 1;   --text-36--letter-spacing: -.02em;
+  --text-30: 24px;  --text-30--line-height: auto; --text-30--letter-spacing: -.02em;
+  --text-26: 20px;  --text-26--line-height: auto; --text-26--letter-spacing: -.02em;
+  --text-small: 14px; --text-small--line-height: 1.5; --text-small--letter-spacing: .08em;
+  --text-tiny: 12px;  --text-tiny--line-height: 1.5;  --text-tiny--letter-spacing: 0em;
+  --text-140: 70px;  --text-140--line-height: .8;  --text-140--letter-spacing: 0em;
+  --text-180: 50px;  --text-180--line-height: 1;   --text-180--letter-spacing: -.02em;
+  --text-240: 60px;  --text-240--line-height: .833; --text-240--letter-spacing: -.02em;
+
+  /* Grid */
+  --grid-col: calc(100vw / 12);
+  --grid-gap: .625rem;
+
+  /* Fonts */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-title: 'Oswald', sans-serif;
+  --font-body: 'Inter Tight', 'Inter', sans-serif;
+  --font-serif: 'Georgia', serif;
+}
+
+/* ===== Antler pattern ===== */
+@keyframes antler-scroll {
+  0% { background-position: 0 0; }
+  to { background-position: 95px 0; }
+}
+.antler-pattern {
+  background-image: url(/images/antler-pattern.webp);
+  background-size: 95px 158px;
+  animation: 12s linear infinite antler-scroll;
+}
+
+/* ===== Reset ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: auto; } /* Lenis handles smooth scroll */
+
+body {
+  background-color: var(--black);
+  color: var(--cream);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ===== Typography ===== */
+.font-display { font-family: var(--font-display); }
+.font-title { font-family: var(--font-title); }
+.font-body { font-family: var(--font-body); }
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+
+/* ===== Marquee ===== */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.animate-marquee-left { animation: marquee-left 18s linear infinite; }
+.animate-marquee-right { animation: marquee-right 18s linear infinite; }
+
+/* ===== Float animation ===== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-18px) rotate(3deg); }
+  66% { transform: translateY(-8px) rotate(-2deg); }
+}
+@keyframes float2 {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-12px) rotate(-3deg); }
+  66% { transform: translateY(-22px) rotate(2deg); }
+}
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-float2 { animation: float2 8s ease-in-out infinite; }
+.animate-float3 { animation: float 10s ease-in-out infinite reverse; }
+
+/* ===== Noise overlay ===== */
+.noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ===== Hover effect button ===== */
+.btn-sauce {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--red);
+  color: var(--cream);
+  font-family: var(--font-title);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 14px 32px;
+  border: 2px solid var(--red);
+  transition: background 0.25s, color 0.25s, transform 0.15s;
+}
+.btn-sauce:hover {
+  background: transparent;
+  color: var(--red);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--cream);
+  font-family: var(--font-title);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 12px 28px;
+  border: 1px solid rgba(245,230,200,0.4);
+  transition: border-color 0.25s, color 0.25s;
+}
+.btn-outline:hover { border-color: var(--cream); }
+
+/* ===== Product card hover ===== */
+.product-card { transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.product-card:hover { transform: translateY(-8px); }
+
+/* ===== Accordion ===== */
+.accordion-content {
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s;
+}
+
+/* ===== Line reveal ===== */
+.line-reveal { overflow: hidden; }
+.line-reveal span { display: block; }
+
+/* ===== Cursor ===== */
+.cursor-custom {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: var(--red);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease, width 0.25s, height 0.25s, background 0.25s;
+  transform: translate(-50%, -50%);
+}
+
+/* ===== Selection ===== */
+::selection { background: var(--red); color: var(--cream); }
+
+
+/* ===== Navbar overflow visible (logo dépasse vers le haut) ===== */
+nav {
+  overflow: visible !important;
+}
+nav > div {
+  overflow: visible !important;
+}

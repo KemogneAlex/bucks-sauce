@@ -1,0 +1,241 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 118 142"
+  fill="none"
+>
+  <!-- ══════════════════════════════════════════
+       BUCKS SAUCE LOGO — Hand-crafted SVG
+       ViewBox: 0 0 118 142
+       
+       Structure:
+         <g id="text">
+           <g id="bucks">   — "BUCKS" y≈4–28
+           <g id="sauce">   — "SAUCE" y≈28–36
+         <g id="logo">      — cerf stylisé y≈44–128
+           <g id="antlers"> — bois gauche + droite
+           <g id="head">    — tête, oreilles, museau, yeux
+       ══════════════════════════════════════════ -->
+
+  <!-- ── TYPOGRAPHIE ──────────────────────────────────────────── -->
+  <g id="text" fill="#F5E4C7">
+
+    <!-- BUCKS — condensed bold, centré sur x=59, baseline y=27 -->
+    <text
+      id="bucks-text"
+      x="59"
+      y="27"
+      text-anchor="middle"
+      font-family="'Oswald', 'Bebas Neue', 'Arial Narrow', sans-serif"
+      font-weight="700"
+      font-size="28"
+      letter-spacing="3"
+      fill="#F5E4C7"
+    >BUCKS</text>
+
+    <!-- SAUCE — small caps, centré sur x=59, baseline y=35 -->
+    <text
+      id="sauce-text"
+      x="59"
+      y="35.5"
+      text-anchor="middle"
+      font-family="'Oswald', 'Arial Narrow', sans-serif"
+      font-weight="400"
+      font-size="7.5"
+      letter-spacing="5"
+      fill="#F5E4C7"
+    >SAUCE</text>
+
+  </g>
+
+  <!-- ── CERF STYLISÉ ──────────────────────────────────────────── -->
+  <!--
+    Coordonnées cibles (d'après le vrai SVG) :
+    Centre horizontal : x = 59
+    Tête : x 30–88, y 80–115
+    Bois : x 2–115, y 44–88
+  -->
+  <g id="logo" fill="#F5E4C7">
+
+    <!-- ─── BOIS DROITS (right antlers) ─── -->
+    <g id="right-horn">
+      <!--
+        Bois droit : part du haut de la tête (x≈72, y≈80),
+        monte vers la droite avec des ramifications.
+        Chemin principal : tige centrale qui monte en haut à droite
+      -->
+      <!-- Tige centrale droite -->
+      <path d="
+        M 72 80
+        C 75 75, 80 68, 85 60
+        C 88 54, 90 48, 88 44
+        C 87 42, 85 43, 84 45
+        C 83 48, 82 52, 80 57
+        C 78 62, 76 67, 74 72
+        C 73 75, 72 78, 72 80
+        Z
+      "/>
+      <!-- Ramification haute droite -->
+      <path d="
+        M 84 58
+        C 88 55, 95 52, 102 50
+        C 107 48, 110 46, 108 44
+        C 107 43, 104 44, 101 46
+        C 97 48, 92 51, 86 55
+        C 84 57, 83 58, 84 58
+        Z
+      "/>
+      <!-- Ramification médiane droite -->
+      <path d="
+        M 80 67
+        C 84 65, 90 63, 96 62
+        C 100 61, 103 61, 102 59
+        C 101 58, 98 59, 94 60
+        C 89 62, 84 64, 79 66
+        Z
+      "/>
+      <!-- Ramification basse droite -->
+      <path d="
+        M 76 74
+        C 80 73, 86 72, 91 72
+        C 94 72, 96 73, 95 74
+        C 94 75, 91 75, 87 74
+        C 83 74, 79 74, 76 74
+        Z
+      "/>
+    </g>
+
+    <!-- ─── BOIS GAUCHES (left antlers) ─── -->
+    <g id="left-horn">
+      <!-- Tige centrale gauche (miroir de droite) -->
+      <path d="
+        M 46 80
+        C 43 75, 38 68, 33 60
+        C 30 54, 28 48, 30 44
+        C 31 42, 33 43, 34 45
+        C 35 48, 36 52, 38 57
+        C 40 62, 42 67, 44 72
+        C 45 75, 46 78, 46 80
+        Z
+      "/>
+      <!-- Ramification haute gauche -->
+      <path d="
+        M 34 58
+        C 30 55, 23 52, 16 50
+        C 11 48, 8 46, 10 44
+        C 11 43, 14 44, 17 46
+        C 21 48, 26 51, 32 55
+        C 34 57, 35 58, 34 58
+        Z
+      "/>
+      <!-- Ramification médiane gauche -->
+      <path d="
+        M 38 67
+        C 34 65, 28 63, 22 62
+        C 18 61, 15 61, 16 59
+        C 17 58, 20 59, 24 60
+        C 29 62, 34 64, 39 66
+        Z
+      "/>
+      <!-- Ramification basse gauche -->
+      <path d="
+        M 42 74
+        C 38 73, 32 72, 27 72
+        C 24 72, 22 73, 23 74
+        C 24 75, 27 75, 31 74
+        C 35 74, 39 74, 42 74
+        Z
+      "/>
+    </g>
+
+    <!-- ─── TÊTE DU CERF ─── -->
+    <g id="head">
+
+      <!-- Contour principal de la tête — forme en coeur évasé -->
+      <path id="head-outline" d="
+        M 59 128
+        C 52 128, 43 124, 38 117
+        C 33 110, 31 102, 33 94
+        C 35 87, 40 82, 46 80
+        C 50 78, 55 78, 59 78
+        C 63 78, 68 78, 72 80
+        C 78 82, 83 87, 85 94
+        C 87 102, 85 110, 80 117
+        C 75 124, 66 128, 59 128
+        Z
+      "/>
+
+      <!-- Zone intérieure sombre (fenêtre négative pour définir le crâne) -->
+      <path id="head-inner" d="
+        M 59 122
+        C 54 122, 47 119, 43 113
+        C 39 107, 38 100, 40 93
+        C 42 87, 47 83, 52 82
+        C 54 81, 57 81, 59 81
+        C 61 81, 64 81, 66 82
+        C 71 83, 76 87, 78 93
+        C 80 100, 79 107, 75 113
+        C 71 119, 64 122, 59 122
+        Z
+      " fill="#100B06"/>
+
+      <!-- Oreille droite -->
+      <path id="ear-right" d="
+        M 72 84
+        C 75 80, 80 76, 83 76
+        C 86 76, 86 79, 84 82
+        C 82 85, 78 86, 74 85
+        Z
+      "/>
+      <!-- Intérieur oreille droite -->
+      <path d="
+        M 74 83
+        C 76 80, 79 78, 81 78
+        C 83 78, 83 80, 81 82
+        C 79 84, 76 84, 74 83
+        Z
+      " fill="#100B06" opacity="0.5"/>
+
+      <!-- Oreille gauche -->
+      <path id="ear-left" d="
+        M 46 84
+        C 43 80, 38 76, 35 76
+        C 32 76, 32 79, 34 82
+        C 36 85, 40 86, 44 85
+        Z
+      "/>
+      <!-- Intérieur oreille gauche -->
+      <path d="
+        M 44 83
+        C 42 80, 39 78, 37 78
+        C 35 78, 35 80, 37 82
+        C 39 84, 42 84, 44 83
+        Z
+      " fill="#100B06" opacity="0.5"/>
+
+      <!-- Oeil droit -->
+      <ellipse id="eye-right" cx="67" cy="98" rx="4.5" ry="4" fill="#100B06"/>
+      <ellipse cx="67" cy="98" rx="3" ry="2.7" fill="#F5E4C7" opacity="0.15"/>
+      <circle cx="65.5" cy="97" r="1" fill="#F5E4C7" opacity="0.6"/>
+
+      <!-- Oeil gauche -->
+      <ellipse id="eye-left" cx="51" cy="98" rx="4.5" ry="4" fill="#100B06"/>
+      <ellipse cx="51" cy="98" rx="3" ry="2.7" fill="#F5E4C7" opacity="0.15"/>
+      <circle cx="49.5" cy="97" r="1" fill="#F5E4C7" opacity="0.6"/>
+
+      <!-- Museau / mufle -->
+      <ellipse id="muzzle" cx="59" cy="113" rx="11" ry="8" fill="#100B06" opacity="0.4"/>
+      <!-- Nez -->
+      <ellipse id="nose" cx="59" cy="110" rx="5" ry="3.5" fill="#100B06"/>
+      <!-- Narines -->
+      <ellipse cx="56.5" cy="111" rx="1.5" ry="1" fill="#F5E4C7" opacity="0.3"/>
+      <ellipse cx="61.5" cy="111" rx="1.5" ry="1" fill="#F5E4C7" opacity="0.3"/>
+
+      <!-- Ligne de séparation tête (front stripe) -->
+      <path d="M 59 82 C 59 82, 58 88, 58.5 94 C 59 100, 59 106, 59 110" 
+            stroke="#100B06" stroke-width="1.5" stroke-opacity="0.3" fill="none"/>
+
+    </g>
+
+  </g>
+
+</svg>
