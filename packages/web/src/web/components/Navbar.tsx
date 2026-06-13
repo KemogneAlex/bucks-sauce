@@ -43,62 +43,72 @@ function StaggerNavLink({ label, href }: { label: string; href: string }) {
     });
   }, []);
 
-  const FONT_STYLE: React.CSSProperties = {
-    fontFamily: "'Pouler', sans-serif",
-    fontSize: "28.29px",
-    lineHeight: "1em",
-    letterSpacing: "-0.566px",
-    display: "block",
-    whiteSpace: "pre",
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-  };
-
   return (
     <Link to={href}>
       <a
         ref={ref}
         className="uppercase cursor-pointer"
-        style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}
+        style={{ display: "inline-flex", alignItems: "flex-end", textDecoration: "none", gap: "0" }}
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
       >
         {label.split("").map((ch, i) => {
           const char = ch === " " ? "\u00A0" : ch;
+          const charStyle: React.CSSProperties = {
+            fontFamily: "'Pouler', sans-serif",
+            fontSize: "22px",
+            lineHeight: "1",
+            letterSpacing: "0",
+            whiteSpace: "pre",
+          };
           return (
             <span
               key={i}
               className="nchar-wrap"
               style={{
+                position: "relative",
                 display: "inline-block",
                 overflow: "hidden",
-                height: "1.1em",
-                position: "relative",
-                // largeur auto basée sur le char (on laisse le stroke définir la taille)
+                verticalAlign: "bottom",
+                // height driven by the ghost span below
               }}
             >
-              {/* stroke — état repos */}
+              {/* Ghost — invisible, sets natural width & height of the wrap */}
+              <span
+                aria-hidden="true"
+                style={{
+                  ...charStyle,
+                  display: "block",
+                  visibility: "hidden",
+                  pointerEvents: "none",
+                }}
+              >
+                {char}
+              </span>
+              {/* stroke — repos state, slides out on hover */}
               <span
                 className="nl-stroke"
                 style={{
-                  ...FONT_STYLE,
+                  ...charStyle,
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
                   color: "transparent",
-                  WebkitTextStroke: "1px #f5e4c7",
-                  position: "relative",
+                  WebkitTextStroke: "1.2px #f5e4c7",
                   willChange: "transform",
                 }}
               >
                 {char}
               </span>
-              {/* filled — état hover, part du bas */}
+              {/* filled — hover state, starts below */}
               <span
                 className="nl-filled"
                 style={{
-                  ...FONT_STYLE,
+                  ...charStyle,
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
                   color: "#f5e4c7",
-                  WebkitTextStroke: "0",
                   transform: "translateY(100%)",
                   willChange: "transform",
                 }}
