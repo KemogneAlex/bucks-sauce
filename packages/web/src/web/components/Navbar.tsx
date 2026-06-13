@@ -1,7 +1,82 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation } from "wouter";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import { Menu, X, ShoppingCart } from "lucide-react";
+import { gsap } from "gsap";
+
+// ── Letter-by-letter stagger hover link ──────────────────────────────────────
+function StaggerNavLink({ label, href }: { label: string; href: string }) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
+
+  const handleEnter = useCallback(() => {
+    if (!ref.current) return;
+    const chars = ref.current.querySelectorAll(".nchar");
+    if (tlRef.current) tlRef.current.kill();
+    tlRef.current = gsap.timeline();
+    tlRef.current.to(chars, {
+      y: "-40%",
+      color: "#f5e4c7",
+      stagger: 0.04,
+      duration: 0.22,
+      ease: "power2.out",
+    }).to(chars, {
+      y: "0%",
+      stagger: 0.04,
+      duration: 0.18,
+      ease: "power2.out",
+    }, "-=0.12");
+  }, []);
+
+  const handleLeave = useCallback(() => {
+    if (!ref.current) return;
+    const chars = ref.current.querySelectorAll(".nchar");
+    if (tlRef.current) tlRef.current.kill();
+    gsap.to(chars, {
+      color: "#f5e4c7",
+      y: "0%",
+      duration: 0.18,
+      ease: "power2.out",
+    });
+  }, []);
+
+  return (
+    <Link to={href}>
+      <a
+        ref={ref}
+        className="uppercase cursor-pointer"
+        style={{
+          fontFamily: "'Pouler', sans-serif",
+          fontSize: "28.29px",
+          lineHeight: "24.05px",
+          letterSpacing: "-0.566px",
+          color: "#f5e4c7",
+          display: "inline-flex",
+          alignItems: "baseline",
+          gap: "0",
+          textDecoration: "none",
+          overflow: "hidden",
+        }}
+        onMouseEnter={handleEnter}
+        onMouseLeave={handleLeave}
+      >
+        {label.split("").map((ch, i) => (
+          <span
+            key={i}
+            className="nchar"
+            style={{
+              display: "inline-block",
+              color: "#f5e4c7",
+              willChange: "transform, color",
+            }}
+          >
+            {ch === " " ? "\u00A0" : ch}
+          </span>
+        ))}
+      </a>
+    </Link>
+  );
+}
 
 const NAV_LINKS = [
   { label: "Boutique", href: "/shop" },
@@ -110,74 +185,12 @@ export default function Navbar() {
           {/* ── Liens desktop ── */}
           <div
             className="hidden md:flex items-center"
-            style={{
-              gap: "40px",
-              fontFamily: "'Inter Tight', sans-serif",
-              fontWeight: 400,
-              fontSize: "16px",
-              lineHeight: "24px",
-              paddingTop: "14px",
-            }}
+            style={{ gap: "36px", paddingTop: "14px" }}
           >
             {NAV_LINKS.map((item) => (
-              <Link key={item.href} to={item.href}>
-                <span
-                  className="uppercase cursor-pointer"
-                  style={{
-                    color: "var(--cream)",
-                    fontSize: "16px",
-                    lineHeight: "24px",
-                    letterSpacing: "normal",
-                    fontFamily: "'Inter Tight', sans-serif",
-                    fontWeight: 400,
-                    padding: "2px 6px",
-                    display: "inline-block",
-                    transition: "color 0.25s ease, background-color 0.25s ease",
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.color = "#100b06";
-                    e.currentTarget.style.backgroundColor = "#f5e4c7";
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.color = "var(--cream)";
-                    e.currentTarget.style.backgroundColor = "transparent";
-                  }}
-                >
-                  {item.label}
-                </span>
-              </Link>
+              <StaggerNavLink key={item.href} label={item.label} href={item.href} />
             ))}
-
-            <Link to="/cart">
-              <span
-                style={{
-                  color: "var(--cream)",
-                  fontSize: "16px",
-                  lineHeight: "24px",
-                  letterSpacing: "normal",
-                  fontFamily: "'Inter Tight', sans-serif",
-                  fontWeight: 400,
-                  padding: "2px 6px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  textTransform: "uppercase",
-                  cursor: "pointer",
-                  transition: "color 0.25s ease, background-color 0.25s ease",
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.color = "#100b06";
-                  e.currentTarget.style.backgroundColor = "#f5e4c7";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.color = "var(--cream)";
-                  e.currentTarget.style.backgroundColor = "transparent";
-                }}
-              >
-                <ShoppingCart size={14} strokeWidth={2} />
-                Cart(0)
-              </span>
-            </Link>
+            <StaggerNavLink label="Cart(0)" href="/cart" />
           </div>
 
           {/* ── Hamburger mobile ── */}
