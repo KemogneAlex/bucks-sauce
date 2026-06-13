@@ -23,9 +23,9 @@ export default function Navbar() {
 
   const spring = { stiffness: 120, damping: 30, mass: 1 };
 
-  // Vrai site : SVG monte -26%, text fade, bois s'écartent ±15px, wrapper 90→50px
-  const rawSvgY   = useTransform(scrollY, [0, 200], [0, -23.4]);
-  const rawH      = useTransform(scrollY, [0, 200], [90, 50]);
+  // Logo 160px large — SVG monte -26%, wrapper 192→100px
+  const rawSvgY   = useTransform(scrollY, [0, 200], [0, -49.9]);
+  const rawH      = useTransform(scrollY, [0, 200], [192, 100]);
   const rawTextOp = useTransform(scrollY, [0, 120], [1, 0]);
   const rawRhX    = useTransform(scrollY, [0, 200], [0, -15]);
   const rawLhX    = useTransform(scrollY, [0, 200], [0, 15]);
@@ -73,15 +73,15 @@ export default function Navbar() {
             <motion.div
               style={{
                 height: logoH,
-                width: "75px",
+                width: "160px",
                 overflow: "hidden",
                 cursor: "pointer",
                 flexShrink: 0,
               }}
             >
               <motion.svg
-                width="75"
-                height="90"
+                width="160"
+                height="192"
                 viewBox="0 0 118 142"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
