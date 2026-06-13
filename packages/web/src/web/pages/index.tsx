@@ -94,12 +94,12 @@ export default function HomePage() {
 
           {/* Titre hero — 3 lignes, style vrai site */}
           <h1
-            className="uppercase leading-none w-full"
+            className="uppercase w-full"
             style={{
               fontFamily: "'Pouler', sans-serif",
-              fontSize: "clamp(60px, 12vw, 170px)",
-              lineHeight: 0.9,
-              letterSpacing: "-0.02em",
+              fontSize: "94.305px",
+              lineHeight: "82.9884px",
+              letterSpacing: "-1.8861px",
             }}
           >
             {/* Ligne 1 : outline (stroke) */}

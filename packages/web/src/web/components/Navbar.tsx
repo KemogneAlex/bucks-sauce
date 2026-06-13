@@ -111,23 +111,37 @@ export default function Navbar() {
           <div
             className="hidden md:flex items-center"
             style={{
-              gap: "36px",
+              gap: "40px",
               fontFamily: "'Inter Tight', sans-serif",
-              fontWeight: 500,
+              fontWeight: 400,
+              fontSize: "16px",
+              lineHeight: "24px",
               paddingTop: "14px",
             }}
           >
             {NAV_LINKS.map((item) => (
               <Link key={item.href} to={item.href}>
                 <span
-                  className="uppercase cursor-pointer transition-colors duration-200"
+                  className="uppercase cursor-pointer"
                   style={{
-                    color: location === item.href ? "var(--red)" : "var(--cream)",
-                    fontSize: "12px",
-                    letterSpacing: "0.1em",
+                    color: "var(--cream)",
+                    fontSize: "16px",
+                    lineHeight: "24px",
+                    letterSpacing: "normal",
+                    fontFamily: "'Inter Tight', sans-serif",
+                    fontWeight: 400,
+                    padding: "2px 6px",
+                    display: "inline-block",
+                    transition: "color 0.25s ease, background-color 0.25s ease",
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "var(--red)")}
-                  onMouseLeave={e => (e.currentTarget.style.color = location === item.href ? "var(--red)" : "var(--cream)")}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.color = "#100b06";
+                    e.currentTarget.style.backgroundColor = "#f5e4c7";
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.color = "var(--cream)";
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  }}
                 >
                   {item.label}
                 </span>
@@ -138,20 +152,30 @@ export default function Navbar() {
               <span
                 style={{
                   color: "var(--cream)",
-                  fontSize: "12px",
-                  letterSpacing: "0.1em",
-                  fontWeight: 500,
+                  fontSize: "16px",
+                  lineHeight: "24px",
+                  letterSpacing: "normal",
+                  fontFamily: "'Inter Tight', sans-serif",
+                  fontWeight: 400,
+                  padding: "2px 6px",
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
                   textTransform: "uppercase",
                   cursor: "pointer",
+                  transition: "color 0.25s ease, background-color 0.25s ease",
                 }}
-                onMouseEnter={e => (e.currentTarget.style.color = "var(--red)")}
-                onMouseLeave={e => (e.currentTarget.style.color = "var(--cream)")}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = "#100b06";
+                  e.currentTarget.style.backgroundColor = "#f5e4c7";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = "var(--cream)";
+                  e.currentTarget.style.backgroundColor = "transparent";
+                }}
               >
                 <ShoppingCart size={14} strokeWidth={2} />
-                Panier(0)
+                Cart(0)
               </span>
             </Link>
           </div>
