@@ -5,40 +5,68 @@ import { Menu, X, ShoppingCart } from "lucide-react";
 import { gsap } from "gsap";
 
 // ── Letter-by-letter stagger hover link ──────────────────────────────────────
+// État repos  : stroke cream (comme "LA MEILLEURE")
+// État hover  : lettre monte → filled cream (comme "SAUCE")
+// Technique   : 2 layers par lettre superposés (stroke + filled),
+//               on translate le filled de +100% → 0% en stagger
 function StaggerNavLink({ label, href }: { label: string; href: string }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
   const handleEnter = useCallback(() => {
     if (!ref.current) return;
-    const chars = ref.current.querySelectorAll(".nchar");
+    const filled = ref.current.querySelectorAll<HTMLElement>(".nchar-filled");
+    const stroke = ref.current.querySelectorAll<HTMLElement>(".nchar-stroke");
     if (tlRef.current) tlRef.current.kill();
     tlRef.current = gsap.timeline();
-    tlRef.current.to(chars, {
-      y: "-40%",
-      color: "#f5e4c7",
-      stagger: 0.04,
-      duration: 0.22,
-      ease: "power2.out",
-    }).to(chars, {
-      y: "0%",
-      stagger: 0.04,
-      duration: 0.18,
-      ease: "power2.out",
-    }, "-=0.12");
+    // filled remonte de bas en haut, stagger lettre par lettre
+    tlRef.current
+      .to(filled, {
+        y: "0%",
+        stagger: 0.045,
+        duration: 0.28,
+        ease: "power3.out",
+      }, 0)
+      // stroke descend en même temps
+      .to(stroke, {
+        y: "-100%",
+        stagger: 0.045,
+        duration: 0.28,
+        ease: "power3.out",
+      }, 0);
   }, []);
 
   const handleLeave = useCallback(() => {
     if (!ref.current) return;
-    const chars = ref.current.querySelectorAll(".nchar");
+    const filled = ref.current.querySelectorAll<HTMLElement>(".nchar-filled");
+    const stroke = ref.current.querySelectorAll<HTMLElement>(".nchar-stroke");
     if (tlRef.current) tlRef.current.kill();
-    gsap.to(chars, {
-      color: "#f5e4c7",
-      y: "0%",
-      duration: 0.18,
-      ease: "power2.out",
-    });
+    tlRef.current = gsap.timeline();
+    // filled redescend
+    tlRef.current
+      .to(filled, {
+        y: "100%",
+        stagger: 0.035,
+        duration: 0.22,
+        ease: "power2.in",
+      }, 0)
+      // stroke revient
+      .to(stroke, {
+        y: "0%",
+        stagger: 0.035,
+        duration: 0.22,
+        ease: "power2.in",
+      }, 0);
   }, []);
+
+  const FONT_STYLE: React.CSSProperties = {
+    fontFamily: "'Pouler', sans-serif",
+    fontSize: "28.29px",
+    lineHeight: "24.05px",
+    letterSpacing: "-0.566px",
+    display: "inline-block",
+    whiteSpace: "pre",
+  };
 
   return (
     <Link to={href}>
@@ -46,33 +74,59 @@ function StaggerNavLink({ label, href }: { label: string; href: string }) {
         ref={ref}
         className="uppercase cursor-pointer"
         style={{
-          fontFamily: "'Pouler', sans-serif",
-          fontSize: "28.29px",
-          lineHeight: "24.05px",
-          letterSpacing: "-0.566px",
-          color: "#f5e4c7",
           display: "inline-flex",
-          alignItems: "baseline",
+          alignItems: "center",
           gap: "0",
           textDecoration: "none",
-          overflow: "hidden",
+          position: "relative",
         }}
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
       >
-        {label.split("").map((ch, i) => (
-          <span
-            key={i}
-            className="nchar"
-            style={{
-              display: "inline-block",
-              color: "#f5e4c7",
-              willChange: "transform, color",
-            }}
-          >
-            {ch === " " ? "\u00A0" : ch}
-          </span>
-        ))}
+        {label.split("").map((ch, i) => {
+          const char = ch === " " ? "\u00A0" : ch;
+          return (
+            // conteneur par lettre : overflow hidden = masque le sliding
+            <span
+              key={i}
+              style={{
+                display: "inline-block",
+                overflow: "hidden",
+                height: "1.1em",
+                lineHeight: "1.1em",
+                verticalAlign: "bottom",
+              }}
+            >
+              {/* stroke layer (repos) */}
+              <span
+                className="nchar-stroke"
+                style={{
+                  ...FONT_STYLE,
+                  color: "transparent",
+                  WebkitTextStroke: "1px #f5e4c7",
+                  display: "block",
+                  willChange: "transform",
+                }}
+              >
+                {char}
+              </span>
+              {/* filled layer (hover) — part de bas */}
+              <span
+                className="nchar-filled"
+                style={{
+                  ...FONT_STYLE,
+                  color: "#f5e4c7",
+                  WebkitTextStroke: "0px transparent",
+                  display: "block",
+                  transform: "translateY(100%)",
+                  willChange: "transform",
+                }}
+              >
+                {char}
+              </span>
+            </span>
+          );
+        })}
       </a>
     </Link>
   );
